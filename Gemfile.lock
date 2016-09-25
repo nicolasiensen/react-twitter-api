@@ -88,6 +88,7 @@ GEM
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
+    oauth (0.5.1)
     pg (0.18.4)
     pkg-config (1.1.7)
     puma (3.6.0)
@@ -168,6 +169,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   listen (~> 3.0.5)
+  oauth
   pg (~> 0.18)
   puma (~> 3.0)
   rack-cors
