@@ -16,7 +16,9 @@ class OauthController < ApplicationController
       oauth_token_secret: params[:oauth_token_secret]
     )
 
-    render json: consumer.get_access_token(request_token, oauth_verifier: params[:oauth_verifier])
+    access_token = consumer.get_access_token(request_token, oauth_verifier: params[:oauth_verifier])
+
+    render json: {token: access_token.token, secret: access_token.secret}
   end
 
   def consumer
