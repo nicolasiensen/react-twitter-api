@@ -17,6 +17,8 @@ class OauthController < ApplicationController
     )
 
     access_token = consumer.get_access_token(request_token, oauth_verifier: params[:oauth_verifier])
+    user = User.find_or_create_by(uuid: access_token.params[:user_id])
+    AccessToken.create(token: access_token.token, user_id: user.id)
 
     render json: {token: access_token.token, secret: access_token.secret}
   end
