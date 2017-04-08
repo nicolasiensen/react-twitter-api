@@ -1,16 +1,23 @@
 require 'test_helper'
 
 class TweetsControllerTest < ActionDispatch::IntegrationTest
-  test "returns timeline tweets" do
+  test "should list tweets" do
     VCR.use_cassette("twitter_home_timeline") do
-      fixture = YAML.load_file("#{Rails.root}/test/vcr_cassettes/twitter_home_timeline.yml")
+      token = "123"
+      secret = "321"
+      user = User.create(uuid: "16239678")
+      access_token = AccessToken.create(user_id: user.id, token: token)
 
-      get "/", params: {twitter_access_token: "123", twitter_access_token_secret: "321"}
+      assert_difference("Tweet.where(user_id: #{user.id}).count", 20) do
+        get "/", params: {twitter_access_token: token, twitter_access_token_secret: secret}
+      end
 
-      assert_equal(
-        JSON.parse(fixture["http_interactions"][0]["response"]["body"]["string"]),
-        response.parsed_body
-      )
+      assert_equal 200, response.status
+      assert_equal 20, JSON.parse(response.body)["tweets"].size
+
+      assert_no_difference("Tweet.where(user_id: #{user.id}).count") do
+        get "/", params: {twitter_access_token: token, twitter_access_token_secret: secret}
+      end
     end
   end
 end
