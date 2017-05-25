@@ -17,4 +17,10 @@ class TweetTest < ActiveSupport::TestCase
     tweet = Tweet.create
     assert tweet.errors[:uuid].include?("can't be blank")
   end
+
+  test "should be archived" do
+    tweet = Tweet.create user_id: 1, uuid: "123"
+    tweet.archive!
+    assert tweet.archived_at.present?
+  end
 end
