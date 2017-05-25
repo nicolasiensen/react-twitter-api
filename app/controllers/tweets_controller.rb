@@ -16,4 +16,23 @@ class TweetsController < ApplicationController
 
     render json: { tweets: Tweet.where(user_id: user.id).limit(20).map(&:data) }
   end
+
+  def archive
+    user = User.joins(:access_tokens).where("access_tokens.token = ?", params[:twitter_access_token]).first
+
+    if user.nil?
+      @error_message = "User with Twitter access token #{params[:twitter_access_token]} was not found"
+      return render 'shared/error', status: 404
+    end
+
+    tweet = Tweet.find_by(uuid: params[:id], user_id: user.id)
+
+    if tweet.nil?
+      @error_message = "Tweet with ID #{params[:id]} was not found"
+      return render 'shared/error', status: 404
+    end
+
+    tweet.archive!
+    head 204
+  end
 end
