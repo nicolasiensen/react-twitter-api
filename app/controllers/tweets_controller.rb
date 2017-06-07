@@ -14,7 +14,12 @@ class TweetsController < ApplicationController
       Tweet.create user_id: user.id, uuid: tweet.id, data: tweet
     end
 
-    render json: { tweets: Tweet.where(user_id: user.id, archived_at: nil).limit(20).map(&:data) }
+    tweets = Tweet.where(user_id: user.id, archived_at: nil).order(created_at: :desc)
+
+    render json: {
+      tweets: tweets.limit(20).map(&:data),
+      total: tweets.count
+    }
   end
 
   def archive

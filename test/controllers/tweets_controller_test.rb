@@ -14,6 +14,7 @@ class TweetsControllerTest < ActionDispatch::IntegrationTest
 
       assert_equal 200, response.status
       assert_equal 19, JSON.parse(response.body)["tweets"].size
+      assert_equal 19, JSON.parse(response.body)["total"]
 
       assert_no_difference("Tweet.where(user_id: #{user.id}).count") do
         get "/", params: {twitter_access_token: token, twitter_access_token_secret: secret}
@@ -22,6 +23,7 @@ class TweetsControllerTest < ActionDispatch::IntegrationTest
       Tweet.where(user_id: user.id).first.archive!
       get "/", params: {twitter_access_token: token, twitter_access_token_secret: secret}
       assert_equal 18, JSON.parse(response.body)["tweets"].size
+      assert_equal 18, JSON.parse(response.body)["total"]
     end
   end
 end
