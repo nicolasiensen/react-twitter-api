@@ -8,10 +8,14 @@ class TweetsController < ApplicationController
     end
 
     user = User.joins(:access_tokens).where("access_tokens.token = ?", params[:twitter_access_token]).first
-    home_timeline = client.home_timeline
 
-    home_timeline.each do |tweet|
-      Tweet.create user_id: user.id, uuid: tweet.id, data: tweet
+    begin
+      home_timeline = client.home_timeline
+
+      home_timeline.each do |tweet|
+        Tweet.create user_id: user.id, uuid: tweet.id, data: tweet
+      end
+    rescue Twitter::Error::TooManyRequests
     end
 
     tweets = Tweet.where(user_id: user.id, archived_at: nil).order(created_at: :desc)
