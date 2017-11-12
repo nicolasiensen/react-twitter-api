@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   put 'tweets/:id/archive', to: 'tweets#archive'
   get 'request_token', to: 'oauth#request_token'
   get 'access_token', to: 'oauth#access_token'
+  get 'link_preview', to: 'link_preview#show'
 end
