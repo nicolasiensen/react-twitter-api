@@ -1,24 +1,25 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+We recommend using [Docker](https://docs.docker.com/) to run this project, once you have it installed you can go through the following steps:
 
-Things you may want to cover:
+```shell
+# Build Docker image to run the project
+docker-compose build
 
-* Ruby version
+# Create the database in the Docker image
+docker-compose run web rake db:create
 
-* System dependencies
+# Create database tables
+docker-compose run web rake db:migrate
 
-* Configuration
+# Start the Rails application
+docker-compose up
+```
 
-* Database creation
+Now the Rails application should be available at [localhost:3001](http://localhost:3001/)
 
-* Database initialization
+In order to run the automated test suite, you can type:
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```shell
+docker-compose run web rails test
+```
