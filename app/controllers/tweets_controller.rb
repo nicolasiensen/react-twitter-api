@@ -10,7 +10,7 @@ class TweetsController < ApplicationController
     user = User.joins(:access_tokens).where("access_tokens.token = ?", params[:twitter_access_token]).first
 
     begin
-      home_timeline = client.home_timeline
+      home_timeline = client.home_timeline(tweet_mode: "extended")
 
       home_timeline.each do |tweet|
         Tweet.create user_id: user.id, uuid: tweet.id, data: tweet
